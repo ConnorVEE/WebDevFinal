@@ -16,9 +16,7 @@
       "id": 3,
       "text": "Food Shopping",
       "day": "May 7th at 12:40pm",
-      "reminder": true
+      "reminder": false
     }
   ]
 }
-
-

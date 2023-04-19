@@ -5,6 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs';
 
 import {Task} from '../Task';
+import { text } from '@fortawesome/fontawesome-svg-core';
 
 const httpOptions = {
 
@@ -19,12 +20,13 @@ const httpOptions = {
 })
 
 export class TaskService {
-  private apiUrl = 'http://localhost:4201/tasks'
+  private apiUrl = 'http://localhost:3000/info'
 
   constructor(private http:HttpClient) { }
 
-  getTasks(): Observable<Task[]> {
-    return this.http.get<Task[]>(this.apiUrl);
+  getTasks() {
+    this.http.get<{post:any}>(this.apiUrl);
+
   }
 
   deleteTask(task: Task): Observable<Task> {
