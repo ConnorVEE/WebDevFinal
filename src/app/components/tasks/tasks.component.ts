@@ -10,31 +10,33 @@ import {Task} from '../../Task';
   styleUrls: ['./tasks.component.css']
 })
 export class TasksComponent implements OnInit {
-  tasks: Task[] = [];
+  tasks: Task[] = [{reminder: false, text: "test", day: "test"}];
 
-  constructor(private taskService: TaskService) { }
+  constructor(public taskService: TaskService) { }
 
   ngOnInit(): void {
 
     this.taskService
       .getTasks()
-      .subscribe((tasks) => (this.tasks = tasks));
+      .subscribe((tasks: Task[]) => (this.tasks = tasks));
+
+    //console.log(JSON.stringify(this.tasks));
 
   }
 
   deleteTask(task: Task) {
     this.taskService
-      .deleteTask(task)
-      .subscribe(() => (this.tasks = this.tasks.filter((t) => t.id !== task.id) ));
+      // .deleteTask(task)
+      // .subscribe(() => (this.tasks = this.tasks.filter((t) => t.id !== task.id) ));
   }
 
   toggleReminder(task: Task) {
-    task.reminder = !task.reminder;
-    this.taskService.updateTaskReminder(task).subscribe()
+    // task.reminder = !task.reminder;
+    // this.taskService.updateTaskReminder(task).subscribe()
   }
 
   addTask(task: Task) {
-    this.taskService.addTask(task).subscribe((task) => (this.tasks.push(task)));
+    // this.taskService.addTask(task).subscribe((task) => (this.tasks.push(task)));
   }
 
 }

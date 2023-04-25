@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-
 import { HttpClient, HttpHeaders } from '@angular/common/http'
-
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators'
 
 import {Task} from '../Task';
+
 import { text } from '@fortawesome/fontawesome-svg-core';
+
 
 const httpOptions = {
 
@@ -24,23 +25,25 @@ export class TaskService {
 
   constructor(private http:HttpClient) { }
 
-  getTasks() {
-    this.http.get<{post:any}>(this.apiUrl);
+  getTasks(): Observable<Task[]> {
+    console.log(`TASKS: ${JSON.stringify(this.http.get<Task[]>(this.apiUrl))}`)
+    return this.http.get<Task[]>(this.apiUrl)
+      .pipe(map((data: any) => data.result ))
 
   }
 
-  deleteTask(task: Task): Observable<Task> {
-    const url = `${this.apiUrl}/${task.id}`;
-    return this.http.delete<Task>(url);
-  }
+  // deleteTask(task: Task): Observable<Task> {
+  //   const url = `${this.apiUrl}/${task.id}`;
+  //   return this.http.delete<Task>(url);
+  // }
 
-  updateTaskReminder(task: Task): Observable<Task> {
-    const url = `${this.apiUrl}/${task.id}`;
-    return this.http.put<Task>(url, task, httpOptions);
-  }
+  // updateTaskReminder(task: Task): Observable<Task> {
+  //   const url = `${this.apiUrl}/${task.id}`;
+  //   return this.http.put<Task>(url, task, httpOptions);
+  // }
 
-  addTask(task: Task): Observable<Task> {
-    return this.http.post<Task>(this.apiUrl, task, httpOptions);
-  }
+  // addTask(task: Task): Observable<Task> {
+  //   return this.http.post<Task>(this.apiUrl, task, httpOptions);
+  // }
 
 }

@@ -6,4 +6,4 @@ taskSchema = mongoose.Schema({
     reminder: {type: Boolean}
 })
 
-module.exports = mongoose.model('Post', taskSchema);
+module.exports = mongoose.model('task', taskSchema);
