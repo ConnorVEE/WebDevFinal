@@ -7,7 +7,7 @@ const taskModel = require("../models/task.js");
 const bodyParser = require('body-parser')
 
 // Connect to Database
-mongoose.connect('mongodb+srv://PatrickStar:ThisIsAHospital@cluster0.ya50kkp.mongodb.net/tasks?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://PatrickStar:<PASSWORD>@cluster0.ya50kkp.mongodb.net/tasks?retryWrites=true&w=majority')
 .then(() => {
   console.log('Connected to database')
 })
