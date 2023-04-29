@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators'
+import { Subject } from 'rxjs';
 
 import {Task} from '../Task';
 
@@ -9,11 +10,9 @@ import { text } from '@fortawesome/fontawesome-svg-core';
 
 
 const httpOptions = {
-
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
   })
-
 }
 
 @Injectable({
@@ -25,17 +24,37 @@ export class TaskService {
 
   constructor(private http:HttpClient) { }
 
-  getTasks(): Observable<Task[]> {
-    console.log(`TASKS: ${JSON.stringify(this.http.get<Task[]>(this.apiUrl))}`)
-    return this.http.get<Task[]>(this.apiUrl)
-      .pipe(map((data: any) => data.result ))
+  private taskUpDate = new Subject<Task[]>
 
+  private task: Task[]=[]
+
+  getUpdateListener(){
+    return this.taskUpDate.asObservable()
   }
 
-  // deleteTask(task: Task): Observable<Task> {
-  //   const url = `${this.apiUrl}/${task.id}`;
-  //   return this.http.delete<Task>(url);
-  // }
+  getMyTask() {
+    this.http.get<{message:string, task: any}>('http://localhost:3000/info').pipe(map((data)=>{
+      return data.task.map(task=>{
+        return{
+          reminder:task.reminder,
+          text:task.text,
+          day:task.day
+
+        }
+      })
+    }))
+    .subscribe((transformedTask)=>{
+    this.task =  transformedTask;
+    this.taskUpDate.next([...this.task])
+    })
+  }
+
+  deleteTask(taskID:string){
+    this.http.delete('http://localhost:3000/info/'+taskID).subscribe(()=>{
+
+
+    })
+  }
 
   // updateTaskReminder(task: Task): Observable<Task> {
   //   const url = `${this.apiUrl}/${task.id}`;

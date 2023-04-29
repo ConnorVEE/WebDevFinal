@@ -1,5 +1,8 @@
+import { Mongoose, ObjectId } from "mongoose"
+
 export interface Task {
-  reminder: boolean;
-  text: string;
-  day: string;
+  _id: ObjectId,
+  reminder: boolean,
+  text: string,
+  day: string
 }

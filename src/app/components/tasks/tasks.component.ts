@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
 import { TaskService } from 'src/app/services/task.service';
-
+import { Subscription } from 'rxjs';
 import {Task} from '../../Task';
 
 @Component({
@@ -10,24 +9,25 @@ import {Task} from '../../Task';
   styleUrls: ['./tasks.component.css']
 })
 export class TasksComponent implements OnInit {
-  tasks: Task[] = [{reminder: false, text: "test", day: "test"}];
+  tasks: Task[] = [];
 
   constructor(public taskService: TaskService) { }
 
+  private taskSub:Subscription;
+
   ngOnInit(): void {
 
-    this.taskService
-      .getTasks()
-      .subscribe((tasks: Task[]) => (this.tasks = tasks));
-
-    //console.log(JSON.stringify(this.tasks));
+    this.taskService.getMyTask()
+    this.taskSub = this.taskService.getUpdateListener().subscribe((task:Task[])=>{
+      this.tasks = task;
+    })
 
   }
 
   deleteTask(task: Task) {
     this.taskService
-      // .deleteTask(task)
-      // .subscribe(() => (this.tasks = this.tasks.filter((t) => t.id !== task.id) ));
+      .deleteTask(task)
+      .subscribe(() => (this.tasks = this.tasks.filter((t) => t._id !== task._id) ));
   }
 
   toggleReminder(task: Task) {

@@ -7,7 +7,7 @@ const taskModel = require("../models/task.js");
 const bodyParser = require('body-parser')
 
 // Connect to Database
-mongoose.connect('mongodb+srv://PatrickStar:<PASSWORD>@cluster0.ya50kkp.mongodb.net/tasks?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://PatrickStar:ThisIsAHospital@cluster0.ya50kkp.mongodb.net/tasks?retryWrites=true&w=majority')
 .then(() => {
   console.log('Connected to database')
 })
@@ -49,20 +49,18 @@ app.get('/', (req, res) => res.send('Hello World!'))
 // })
 
 app.get('/info', (req, res, next) => {
-  taskModel.find()
-  .then(documents => {
+  taskModel.find().then(documents => {
     console.log(documents)
     res.status(200).json({
       //message:"This is fetched data",
-      documents,
+      task:documents
     })
   })
 })
 
-
-
-
-
+app.delete( (req, res, next) => {
+  taskModel.deleteOne({_id: req})
+})
 
 module.exports = app;
 
