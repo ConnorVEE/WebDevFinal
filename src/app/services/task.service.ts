@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http'
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators'
 import { Subject } from 'rxjs';
 
@@ -39,7 +38,6 @@ export class TaskService {
           reminder:task.reminder,
           text:task.text,
           day:task.day
-
         }
       })
     }))
@@ -49,20 +47,24 @@ export class TaskService {
     })
   }
 
-  deleteTask(taskID:string){
-    this.http.delete('http://localhost:3000/info/'+taskID).subscribe(()=>{
-
-
+  deleteTask(id:string){
+    this.http.delete('http://localhost:3000/info/'+id).subscribe(()=>{
+      const updatedTasks = this.task.filter(task => task.id !==id)
+      this.task = updatedTasks
+      this.taskUpDate.next([...this.task])
     })
   }
 
-  // updateTaskReminder(task: Task): Observable<Task> {
-  //   const url = `${this.apiUrl}/${task.id}`;
-  //   return this.http.put<Task>(url, task, httpOptions);
-  // }
+  addTask(reminder: boolean, text: string, day: string) {
+    const task: Task = {id: null, reminder: reminder, text: text, day: day};
+    this.http.post<{message:string, infoId:string}>("http://localhost:3000/info", task)
+    .subscribe((responseData) => {
+      const id = responseData.infoId
+      task.id = id
+        this.task.push(task)
+        this.taskUpDate.next([...this.task])
+    })
 
-  // addTask(task: Task): Observable<Task> {
-  //   return this.http.post<Task>(this.apiUrl, task, httpOptions);
-  // }
+  }
 
 }

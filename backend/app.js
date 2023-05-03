@@ -35,18 +35,20 @@ app.use((req, res, next)=>{
 // Test get
 app.get('/', (req, res) => res.send('Hello World!'))
 
-// app.post('/info',(req,res,next)=>{
-//   const info = new taskModel({
-//     _id: req.body._id,
-//     text: req.body.text,
-//     day: req.body.day,
-//     reminder: req.body.reminder
-//   });
-//   console.log(info);
-//   res.status(201).json({
-//     message: 'Post added successfully'
-//   })
-// })
+app.post('/info',(req,res,next)=>{
+  const info = new taskModel({
+    // _id: req.body._id,
+    text: req.body.text,
+    day: req.body.day,
+    reminder: req.body.reminder
+  });
+info.save().then(sendInfo=>{
+  res.status(201).json({
+    message: "Completed",
+    infoId: sendInfo._id
+  })
+})
+})
 
 app.get('/info', (req, res, next) => {
   taskModel.find().then(documents => {
@@ -58,8 +60,11 @@ app.get('/info', (req, res, next) => {
   })
 })
 
-app.delete( (req, res, next) => {
-  taskModel.deleteOne({_id: req})
+app.delete("info/:id", (req, res, next) => {
+  taskModel.deleteOne({_id: req.params.id}).then(result => {
+    console.log(result)
+    res.status(200).json({message: "Post deleted"})
+  })
 })
 
 module.exports = app;

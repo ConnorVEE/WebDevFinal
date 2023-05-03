@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { TaskService } from 'src/app/services/task.service';
 import { Subscription } from 'rxjs';
 import {Task} from '../../Task';
@@ -8,7 +8,7 @@ import {Task} from '../../Task';
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.css']
 })
-export class TasksComponent implements OnInit {
+export class TasksComponent implements OnInit, OnDestroy {
   tasks: Task[] = [];
 
   constructor(public taskService: TaskService) { }
@@ -24,19 +24,21 @@ export class TasksComponent implements OnInit {
 
   }
 
-  deleteTask(task: Task) {
-    this.taskService
-      .deleteTask(task)
-      .subscribe(() => (this.tasks = this.tasks.filter((t) => t._id !== task._id) ));
+  // deleteTask(task: Task) {
+  //   this.taskService
+  //     .deleteTask(task)
+  //     .subscribe(() => (this.tasks = this.tasks.filter((t) => t._id !== task._id) ));
+  // }
+
+  onDelete(id: string) {
+    this.taskService.deleteTask(id)
   }
 
-  toggleReminder(task: Task) {
-    // task.reminder = !task.reminder;
-    // this.taskService.updateTaskReminder(task).subscribe()
+
+  ngOnDestroy(): void {
+    this.taskSub.unsubscribe()
   }
 
-  addTask(task: Task) {
-    // this.taskService.addTask(task).subscribe((task) => (this.tasks.push(task)));
-  }
+
 
 }
